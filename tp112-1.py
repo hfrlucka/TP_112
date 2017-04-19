@@ -13,8 +13,8 @@ class GameRuntime(object): #repeats over and over while game runs
     def __init__(self):
         pygame.init()
         
-        self.timeStart = 0
-        self.timeAdded = 1000 #milliseconds
+        #self.timeStart = 0
+        #self.timeAdded = 1000 #milliseconds
         self.screen_width = 1920 #recommended)
         self.screen_height = 1080
         self.timer_x = 0
@@ -32,6 +32,9 @@ class GameRuntime(object): #repeats over and over while game runs
         self.runningDis = 0 
         self.jointDis = 0
         self._font = pygame.font.Font(None,36)
+        
+        #used to manage how fast the screen updates
+        self._clock = pygame.time.Clock()
 
         #Kinect runtime object, allowing for color and body frames(skeletal)
         self._kinect = PyKinectRuntime.PyKinectRuntime(
@@ -44,9 +47,6 @@ class GameRuntime(object): #repeats over and over while game runs
         
         #Loop until the user clicks the close button 
         self._done = False
-        
-        #used to manage how fast the screen updates
-        self._clock = pygame.time.Clock()
         
         #initialize screen
         self._screen = pygame.display.set_mode((960, 540), 
@@ -116,6 +116,7 @@ class GameRuntime(object): #repeats over and over while game runs
                         body = self._bodies.bodies[i]
                         if body.is_tracked:
                             #check to see if you can find joint
+                            joints = body.joints
                             if (
                             joints[PyKinectV2.JointType_WristLeft].TrackingState 
                             != PyKinectV2.TrackingState_NotTracked):
@@ -159,17 +160,17 @@ class GameRuntime(object): #repeats over and over while game runs
             #Game essentials
             
             #counting up
-            self.timeStart += self.timeAdded
+            '''self.timeStart += self.timeAdded
             self.timeMins = self.timeStart % 60000 #1 minute
             self.timeSecs = self.timeStart % 1000 #1 second
             if self.timeStart >= 360000: #if player goes over an hour
-                self.timeStart = 0 #reset timer
+                self.timeStart = 0 #reset timer'''
                 
             #distance traveled         += or =??, also estimated
-            self.runningDis=(self.timeMins*0.0175*self.jointDis) #for 1 sec
+            '''self.runningDis=(self.timeMins*0.0175*self.jointDis) #for 1 sec
             
             #calorie count (directly correlated with time and jointDis
-            self.calorieFire = (self.runningDis//0.01)
+            self.calorieFire = (self.runningDis//0.01)'''
                 
             #render the camera's color image
             h_to_w = float((self._frame_surface.get_height())//
