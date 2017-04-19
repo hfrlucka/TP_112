@@ -31,7 +31,8 @@ class GameRuntime(object): #repeats over and over while game runs
         self.calorieFire = 0
         self.runningDis = 0 
         self.jointDis = 0
-        
+        self._font = pygame.font.Font(None,36)
+
         #Kinect runtime object, allowing for color and body frames(skeletal)
         self._kinect = PyKinectRuntime.PyKinectRuntime(
           PyKinectV2.FrameSourceTypes_Color | PyKinectV2.FrameSourceTypes_Body)
@@ -71,6 +72,8 @@ class GameRuntime(object): #repeats over and over while game runs
     #tuple with 3 digits for colors - red in this case
         pygame.draw.rect(self._frame_surface, (120, 0, 0), 
                         (self.timer_x, 0, 90, 50))
+        time_display = (
+            self._font.render("Time: "+str(self._clock.get_time()),1,(0,0,0)))
         #display mins and seconds
         '''pygame.draw.text(self._frame_surface, (45, 25), 
             text = "Time: " + str(self.timeMins) + ":" + str(self.timeSecs),
@@ -81,6 +84,8 @@ class GameRuntime(object): #repeats over and over while game runs
                         (0, self.calories_y, 90, self.screen_height))
         '''pygame.draw.text(self._frame_surface, (45, self.calories_y+25),
             text = "Calories: " + str(self.calorieFire), font = "Arial 16")'''
+        calories_display = (
+            self._font.rend("cal: "+str(self.calorieFire),1,(0,0,0)))
             
     def draw_distance(self):
         pygame.draw.rect(self._frame_surface, (0, 0, 200), #blue color
@@ -116,7 +121,7 @@ class GameRuntime(object): #repeats over and over while game runs
                             != PyKinectV2.TrackingState_NotTracked):
                                 (self.cur_left_wrist_height =
                               joints[PyKinectV2.JointType_WristLeft].Position.y)
-                            if (
+                            '''if (
                         joints[PyKinectV2.JointType_WristRight].TrackingState 
                             != PyKinectV2.TrackingState_NotTracked):
                                 (self.cur_right_wrist_height =
@@ -125,7 +130,7 @@ class GameRuntime(object): #repeats over and over while game runs
                             joints[PyKinectV2.JointType_KneeLeft].TrackingState
                             != PyKinectV2.TrackingState_NotTracked):
                                 (self.cur_left_knee_height = 
-                               joints[PyKinectV2.JointType_KneeLeft].Position.y)
+                            joints[PyKinectV2.JointType_KneeLeft].Position.y)'''
                             if (
                         joints[PyKinectV2.JointType_KneeRight].TrackingState 
                             != PyKinectV2.TrackingState_NotTracked):
@@ -177,6 +182,7 @@ class GameRuntime(object): #repeats over and over while game runs
             pygame.display.update()
                     
             self._clock.tick(60)
+            
         self._kinect.close() #close our sensor and then quit   
         pygame.quit()
                                 
